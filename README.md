@@ -16,5 +16,6 @@ The goal of this project is to leverage MySQL to analyze customer data and gain 
 
 Refere the following file to get detailed insight into the project : 
 - create_mavenfuzzy_database.sql.zip file to get access to SQL script used to create databse.
-- Sql file to access the SQL queries written for analysing the database.
-- pdf file icludes a brief project introduction and contains SQL queries along with results in question & answer format. 
+- mavenfuzzy_Sql_script_splution.sql file to access the SQL queries written for analysing the database.
+- Mavenfuzzy_Project.pdf file icludes a brief project introduction and contains SQL queries along with results in question & answer format. 
+- README.md file which is this file.

@@ -5,7 +5,7 @@ This repository contains an e-commerce project focused on analyzing and deriving
 
 This project has been divided into two parts. 
 - Part 1 looks at the business performance for a duration of 8 months since it went live.
-- Part 2 analyses overall performance for a period of 3 years since the beginning and paint a promising grwoth picture in order to secure next round og funding.
+- Part 2 analyses overall performance for a period of 3 years since the beginning and paint a promising grwoth picture in order to secure next round of funding.
   
 The goal of this project is to leverage MySQL to analyze customer data and gain valuable insights for business decision-making in the e-commerce domain. The analysis focuses on the following areas:
 

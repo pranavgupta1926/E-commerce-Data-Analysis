@@ -14,7 +14,7 @@ The goal of this project is to leverage MySQL to analyze customer data and gain 
 - Cross-selling: Exploring customer purchase patterns and identifying products that are frequently purchased together for targeted cross-selling initiatives.
 - A/B tests : Analyzing the impact of adding new landing pages, new products by tracking metrics like session volume, session to order conversion rate
 
-Refere the following file to get detailed insight into the project : 
+Refer the following file to get detailed insight into the project : 
 - create_mavenfuzzy_database.sql.zip file to get access to SQL script used to create databse.
 - mavenfuzzy_Sql_script_splution.sql file to access the SQL queries written for analysing the database.
 - Mavenfuzzy_Project.pdf file icludes a brief project introduction and contains SQL queries along with results in question & answer format. 

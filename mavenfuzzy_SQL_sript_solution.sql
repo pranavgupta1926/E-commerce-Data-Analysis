@@ -11,8 +11,8 @@ SELECT Year,
        COUNT(DISTINCT(CASE WHEN utm_source IS NULL AND http_referer IS NULL THEN website_session_id ELSE NULL END)) direct_typein_sessions
 FROM
 (SELECT  YEAR(WS.created_at) Year,
-		MONTH(WS.created_at) Mon,
-		website_session_id,
+	MONTH(WS.created_at) Mon,
+	website_session_id,
         utm_source,
         utm_campaign,
         http_referer
@@ -25,7 +25,7 @@ GROUP BY 1,2;
 
 WITH cte AS(
 SELECT 
-		YEAR(WS.created_at) Year,
+	YEAR(WS.created_at) Year,
         MONTH(WS.created_at) Mon,
         WS.website_session_id,
         orders.order_id
@@ -36,8 +36,8 @@ WHERE WS.created_at < '2012-11-27'
 AND utm_source = 'gsearch')
 
 SELECT Year,
-	   Mon,
-	   COUNT(DISTINCT(website_session_id)) gsearch_session,
+	Mon,
+	COUNT(DISTINCT(website_session_id)) gsearch_session,
        COUNT(DISTINCT(order_id)) sessions_with_order,
        COUNT(DISTINCT(order_id))*100/COUNT(DISTINCT(website_session_id)) AS session_to_order_rt
 FROM cte
@@ -49,7 +49,7 @@ GROUP BY Year,Mon;
  27th Nov for analysis*/
 
 SELECT 
-	Year(WS.created_at) Year,
+    Year(WS.created_at) Year,
     Month(WS.created_at) Mon,
     COUNT(DISTINCT(WS.website_session_id)) gsearch_sessions,
     COUNT(DISTINCT(CASE WHEN WS.device_type = 'mobile' THEN WS.website_session_id ELSE NULL END)) mobile_sessions,
@@ -149,7 +149,7 @@ FROM website_sessions WS
 LEFT JOIN orders 
 ON WS.website_session_id = orders.website_session_id 
 GROUP BY 1,2;
--- Most orders coming through gsearch. Orders coming through Organic and Directtype in have also grwon significatnly
+-- Most orders coming through gsearch. Orders coming through Organic and Directtype in have also grown significantly
 
 -- Getting session to order conversion rate
 SELECT 
@@ -178,10 +178,12 @@ GROUP BY 1,2;
 
 
 
-/* Q.7 Pull monthly trend of revenue and profit margin product wise. Notice seaonality trend */
+/* Q.7 Pull monthly trend of revenue and profit margin product wise. Notice seasonality trend */
 
-WITH cte1 AS(SELECT YEAR(orders.created_at) Year,
-	   MONTH(orders.created_at) Mon,
+WITH cte1 AS(
+SELECT 
+	YEAR(orders.created_at) Year,
+	MONTH(orders.created_at) Mon,
        
        SUM(CASE WHEN product_id = 1 THEN order_items.price_USD ELSE NULL END) product1_revenue,
        SUM(CASE WHEN product_id = 1 THEN order_items.price_USD ELSE NULL END)- SUM(CASE WHEN product_id = 1 THEN order_items.cogs_usd ELSE NULL END) product1_margin,
@@ -200,26 +202,28 @@ INNER JOIN order_items
 ON order_items.order_id = orders.order_id
 GROUP BY 1,2),
 
-cte2 AS(SELECT
-		YEAR(orders.created_at) Year,
-	    MONTH(orders.created_at) Month,
-		SUM(orders.items_purchased) total_sales,
+cte2 AS(
+SELECT
+	YEAR(orders.created_at) Year,
+	MONTH(orders.created_at) Month,
+	SUM(orders.items_purchased) total_sales,
         SUM(orders.price_usd) total_revenue
 FROM orders
 GROUP BY 1,2)
 
-SELECT cte1.Year,
-		cte1.Mon,
+SELECT 
+	cte1.Year,
+	cte1.Mon,
         cte2.total_sales,
         cte2.total_revenue,
         cte1.product1_revenue,
-		cte1.product1_margin,
+	cte1.product1_margin,
         cte1.product2_revenue,
-		cte1.product2_margin,
+	cte1.product2_margin,
         cte1.product3_revenue,
-		cte1.product3_margin,
+	cte1.product3_margin,
         cte1.product4_revenue,
-		cte1.product4_margin
+	cte1.product4_margin
         
 FROM cte1
 INNER JOIN cte2 
@@ -227,7 +231,7 @@ ON cte2.Month = cte1.Mon
 AND cte2.Year = cte1.Year;
 /* -- seasonality trends coudld be found for following months of years :
  2012/11, 2012/12, 2013/3, 2013/11, 2013/12, 2014/11, 2014/12
-need to dig deep into these specific months to get specific week of month and day of week we can see spike up/dpwm and try looking at cause/effect
+need to dig deep into these specific months to get specific week of month and day of week we can see spike up/down and try looking at cause/effect
 and be prepared with staffs.inventory */
 
 
@@ -236,17 +240,18 @@ and be prepared with staffs.inventory */
 /* Q.8 Analyze the impact of introducing new products. Pull monthly trend of sessions landing on product page,
 clickthrough rates of product page & order conversion rate*/
 
-SELECT  YEAR(WP.created_at) Year,
-		MONTH(WP.created_at) Mon,
-		COUNT(DISTINCT(WP.website_session_id)) sessions, 
+SELECT  
+	YEAR(WP.created_at) Year,
+	MONTH(WP.created_at) Mon,
+	COUNT(DISTINCT(WP.website_session_id)) sessions, 
         
-		COUNT(DISTINCT(CASE WHEN WP.pageview_url = '/products' THEN WP.website_session_id ELSE NULL END)) AS to_products,
+	COUNT(DISTINCT(CASE WHEN WP.pageview_url = '/products' THEN WP.website_session_id ELSE NULL END)) AS to_products,
         COUNT(DISTINCT(CASE WHEN WP.pageview_url IN ('/the-original-mr-fuzzy','/the-forever-love-bear','/the-birthday-sugar-panda','/the-hudson-river-mini-bear') THEN WP.website_session_id ELSE NULL END)) to_next_page,
         COUNT(DISTINCT(CASE WHEN WP.pageview_url IN ('/the-original-mr-fuzzy','/the-forever-love-bear','/the-birthday-sugar-panda','/the-hudson-river-mini-bear') THEN WP.website_session_id ELSE NULL END))/
         COUNT(DISTINCT(CASE WHEN WP.pageview_url = '/products' THEN WP.website_session_id ELSE NULL END)) clickthough_products,
         
        COUNT(DISTINCT(CASE WHEN WP.pageview_url = '/products' THEN orders.order_id ELSE NULL END))  orders_placed,
-         COUNT(DISTINCT(CASE WHEN WP.pageview_url = '/products' THEN orders.order_id ELSE NULL END))/COUNT(DISTINCT(CASE WHEN WP.pageview_url = '/products' THEN WP.website_session_id ELSE NULL END)) product_to_order_cnv_rt
+       COUNT(DISTINCT(CASE WHEN WP.pageview_url = '/products' THEN orders.order_id ELSE NULL END))/COUNT(DISTINCT(CASE WHEN WP.pageview_url = '/products' THEN WP.website_session_id ELSE NULL END)) product_to_order_cnv_rt
 FROM website_pageviews WP
 LEFT JOIN orders 
 ON orders.website_session_id = WP.website_session_id
@@ -260,7 +265,7 @@ GROUP BY 1,2;
 
 WIth cte AS(
 SELECT 
-	O.order_id,
+    O.order_id,
     O.items_purchased,
     O.primary_product_id,
     OI.product_id AS X_sell_product
@@ -271,8 +276,8 @@ WHERE O.created_at > '2014-12-05'
 AND OI.is_primary_item =0)
 
 SELECT primary_product_id,
-		 COUNT(DISTINCT(order_id)) total_orders,
-	 COUNT(DISTINCT( CASE WHEN X_sell_product = 1 THEN order_id ELSE NULL END)) product1_x_sold,
+	COUNT(DISTINCT(order_id)) total_orders,
+	COUNT(DISTINCT( CASE WHEN X_sell_product = 1 THEN order_id ELSE NULL END)) product1_x_sold,
       COUNT(DISTINCT(CASE WHEN X_sell_product = 2 THEN order_id ELSE NULL END)) product2_x_sold,
       COUNT(DISTINCT(CASE WHEN X_sell_product = 3 THEN order_id ELSE NULL END)) product3_x_sold,
       COUNT(DISTINCT(CASE WHEN X_sell_product = 4 THEN order_id ELSE NULL END)) product4_x_sold

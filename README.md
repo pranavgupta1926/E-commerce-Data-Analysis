@@ -1,6 +1,7 @@
 
 # E-Commerce Data Analysis
 
+This project was part of "Advanced MySQL : Data Analysis and Business Intelligence" Course on Udemy. 
 This repository contains an e-commerce project focused on analyzing and deriving insights from customer data using MySQL. Maven fuzzy factory is an online retailer which launched their first product in March 2012. A Data analyst in the company is tasked with analyzing consumer data to provide valuable inputs whiich in turn would be utitlised for the growth and optimisation of the business.
 
 This project has been divided into two parts. 
